@@ -179,3 +179,10 @@ agent_skill/
 │   └── general-review.md     # General review agent prompt
 └── README.md
 ```
+
+## Acknowledgements
+
+This plugin was inspired by and built upon the work of:
+
+- **Security Review Agent**: Based on [claude-code-security-review](https://github.com/anthropics/claude-code-security-review) by Anthropic
+- **General Review Agent**: Inspired by [OpenAI Codex](https://github.com/openai/codex) review patterns

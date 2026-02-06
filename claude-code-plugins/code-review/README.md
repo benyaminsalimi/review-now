@@ -45,7 +45,7 @@ The plugin picks its strategy automatically based on one file:
 | `REVIEW_GUIDELINES.md` in repo root? | Strategy |
 |---------------------------------------|----------|
 | Yes | Reviews directly using your guidelines. No agents. |
-| No | Dispatches 2 specialized agents in parallel. |
+| No | Dispatches 3 specialized agents in parallel. |
 
 ### Multi-Agent Pipeline (no guidelines file)
 
@@ -58,9 +58,10 @@ Discover AGENTS.md files (scoped rules per directory)
        |
 Gather diff + file list + commit log
        |
-Launch 2 agents in parallel
+Launch 3 agents in parallel
   |- Security review agent (sonnet)
   |- General code review agent (sonnet)
+  |- Frontend/Angular review agent (sonnet)
        |
 Deduplicate findings
        |
@@ -102,6 +103,21 @@ A code reviewer persona focused on correctness, maintainability, and quality. Fl
 - The author would fix if aware of them
 
 Covers untrusted user input handling (open redirects, SQL parameterization, SSRF protection), dependency review, fail-fast patterns, error handling, and system-level thinking.
+
+### Frontend/Angular Review Agent
+
+An Angular expert persona focused on modern Angular best practices, performance, and architecture. Examines:
+
+- Signal-based architecture (input(), model(), computed(), output())
+- Change detection optimization (track expressions, class/style bindings)
+- Modern template syntax (@if, @for, @switch instead of *ngIf, *ngFor)
+- Dependency injection patterns (inject() function, DestroyRef)
+- Lifecycle management (proper hook usage, render callbacks)
+- Component API design (input/output naming, transforms)
+- Content projection and composition
+- View encapsulation and styling
+
+Uses Angular official guidelines from angular.dev. Flags P0 issues like missing `track` expressions in `@for` loops, and P1 issues like using legacy syntax or improper signal patterns.
 
 ## Priority System
 

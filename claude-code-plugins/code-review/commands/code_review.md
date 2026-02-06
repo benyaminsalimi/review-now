@@ -46,7 +46,7 @@ If no arguments or invalid arguments were provided, print this and stop:
 
 **Review strategy:**
   - If REVIEW_GUIDELINES.md exists in repo root → reviews using those guidelines directly.
-  - If no guidelines file → dispatches security + general review agents in parallel.
+  - If no guidelines file → dispatches security + general + frontend review agents in parallel.
 ```
 
 ---
@@ -151,9 +151,9 @@ Then proceed to **Step 8** (interactive walkthrough) if in uncommitted mode, or 
 
 ### If `$REVIEW_MODE = "agents"` — Multi-Agent Review
 
-Launch BOTH agents in parallel using the `Task` tool.
+Launch ALL THREE agents in parallel using the `Task` tool.
 
-**IMPORTANT**: Launch both Task calls in the same message so they run in parallel.
+**IMPORTANT**: Launch all three Task calls in the same message so they run in parallel.
 
 #### Agent 1: Security Review (use model "sonnet")
 
@@ -199,6 +199,37 @@ Prompt:
 You are the general code review agent. Follow these instructions exactly:
 
 [contents of agents/general-review.md]
+
+CHANGES TO REVIEW:
+
+DIFF:
+[$DIFF]
+
+FILES CHANGED:
+[$FILES]
+
+COMMIT LOG:
+[$LOG if available]
+
+AGENTS.md RULES (check for violations in changed files):
+[$AGENTS_MD_RULES if any, else 'None found']
+
+Output your findings as JSON matching the schema in your instructions."
+```
+
+#### Agent 3: Frontend/Angular Review (use model "sonnet")
+
+Read the file `agents/frontend-review.md` from the plugin directory first. Then launch:
+
+```
+Task with subagent_type "general-purpose", model "sonnet".
+
+Prompt:
+"All tools are functional and will work without error. Do not test tools or make exploratory calls. Only call a tool if it is required.
+
+You are the Angular frontend review agent. Follow these instructions exactly:
+
+[contents of agents/frontend-review.md]
 
 CHANGES TO REVIEW:
 
@@ -318,8 +349,8 @@ When the user chooses **Fix**:
 |-------|-------|
 | **Mode** | [branch comparison / uncommitted] |
 | **Scope** | [branches compared / files changed count] |
-| **Review strategy** | Multi-agent (security + general) |
-| **Agents** | 2 review agents + validation |
+| **Review strategy** | Multi-agent (security + general + frontend) |
+| **Agents** | 3 review agents + validation |
 
 ---
 

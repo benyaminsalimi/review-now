@@ -1,5 +1,5 @@
 {
   "name": "code-review",
-  "description": "Code review: branch diff or uncommitted changes — guideline-based or multi-agent (security + general)",
-  "version": "1.1.0"
+  "description": "Code review: branch diff or uncommitted changes — guideline-based or multi-agent (security + general + frontend)",
+  "version": "1.2.0"
 }

@@ -13,15 +13,15 @@ my-ai-tools/
 
 ## Claude Code Plugins
 
-### code-review-skill
+### code-review
 
 A multi-agent code review plugin for Claude Code that provides comprehensive PR and uncommitted changes review.
 
 **Installation:**
 ```bash
-cd claude-code-plugins/code-review-skill
+cd claude-code-plugins/code-review
 claude plugin marketplace add ./
-claude plugin install code-review-skill@local-dev
+claude plugin install code-review@local-dev
 ```
 
 **Usage:**
@@ -40,7 +40,7 @@ claude plugin install code-review-skill@local-dev
 - Support for custom guidelines via REVIEW_GUIDELINES.md
 - AGENTS.md support for directory-scoped rules
 
-See [code-review-skill/README.md](claude-code-plugins/code-review-skill/README.md) for detailed documentation.
+See [code-review/README.md](claude-code-plugins/code-review/README.md) for detailed documentation.
 
 ## Skills
 

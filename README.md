@@ -1,14 +1,14 @@
 # My AI Tools
 
-A collection of AI development tools, skills, and prompts for various AI platforms and frameworks.
+A collection of AI development tools, plugins, skills, and hooks for Claude Code and other AI platforms.
 
 ## Structure
 
 ```
 my-ai-tools/
-├── claude-code-plugins/    # Claude Code plugins and skills
+├── claude-code-plugins/    # Claude Code plugins
 ├── skills/                 # Standalone AI skills and agents
-└── prompts/               # Reusable prompts and templates
+└── hooks/                  # Claude Code hooks for automation
 ```
 
 ## Claude Code Plugins
@@ -46,9 +46,19 @@ See [code-review/README.md](claude-code-plugins/code-review/README.md) for detai
 
 _Coming soon_
 
-## Prompts
+Standalone AI skills and agent configurations that can be used across different platforms.
+
+## Hooks
 
 _Coming soon_
+
+Claude Code hooks for:
+- Pre-commit validation
+- Automatic linting and formatting
+- Security checks
+- Custom workflow automation
+
+See [hooks/README.md](hooks/README.md) for examples and documentation.
 
 ## Contributing
 

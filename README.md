@@ -19,7 +19,7 @@ Built for two scenarios:
 claude plugin marketplace add benyaminsalimi/review-now
 
 # Install the plugin
-claude plugin install review-now@benyaminsalimi/review-now
+claude plugin install review-now@review-now-marketplace
 ```
 
 ### Local Development
@@ -28,7 +28,7 @@ claude plugin install review-now@benyaminsalimi/review-now
 git clone https://github.com/benyaminsalimi/review-now.git
 cd review-now
 claude plugin marketplace add ./
-claude plugin install review-now
+claude plugin install review-now@review-now-marketplace
 ```
 
 ## Commands

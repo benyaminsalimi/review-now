@@ -12,11 +12,23 @@ Built for two scenarios:
 
 ## Installation
 
+### From GitHub (Recommended)
+
+```bash
+# Add the marketplace
+claude plugin marketplace add benyaminsalimi/my-ai-tools
+
+# Install the plugin
+claude plugin install review-now@benyaminsalimi/my-ai-tools
+```
+
+### Local Development
+
 ```bash
 git clone https://github.com/benyaminsalimi/my-ai-tools.git
 cd my-ai-tools
 claude plugin marketplace add ./
-claude plugin install review-now@local-dev
+claude plugin install review-now
 ```
 
 ## Commands

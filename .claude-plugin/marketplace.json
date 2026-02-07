@@ -1,22 +1,24 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "local-dev",
-  "description": "Local plugin development marketplace",
+  "name": "review-now-marketplace",
+  "description": "Interactive code review plugin with multi-agent analysis and conversational walkthrough",
   "owner": {
     "name": "Benyamin Salimi",
-    "email": "dev@localhost"
+    "email": "benyamin.salimi@gmail.com"
   },
   "plugins": [
     {
       "name": "review-now",
-      "description": "Interactive code review with multi-agent analysis. Two commands: /review-now:pr for pull requests, /review-now:uncommitted for local changes",
+      "description": "Interactive code review with multi-agent analysis. Walk through findings one at a time, apply fixes inline, ask questions about each issue. Supports both PR reviews and uncommitted changes with automatic commits in PR mode.",
       "version": "2.0.0",
       "author": {
         "name": "Benyamin Salimi",
-        "email": "dev@localhost"
+        "email": "benyamin.salimi@gmail.com"
       },
       "source": "./",
-      "category": "productivity"
+      "category": "productivity",
+      "homepage": "https://github.com/benyaminsalimi/my-ai-tools",
+      "tags": ["code-review", "security", "quality", "interactive", "multi-agent"]
     }
   ]
 }

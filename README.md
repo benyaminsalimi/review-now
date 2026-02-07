@@ -16,17 +16,17 @@ Built for two scenarios:
 
 ```bash
 # Add the marketplace
-claude plugin marketplace add benyaminsalimi/my-ai-tools
+claude plugin marketplace add benyaminsalimi/review-now
 
 # Install the plugin
-claude plugin install review-now@benyaminsalimi/my-ai-tools
+claude plugin install review-now@benyaminsalimi/review-now
 ```
 
 ### Local Development
 
 ```bash
-git clone https://github.com/benyaminsalimi/my-ai-tools.git
-cd my-ai-tools
+git clone https://github.com/benyaminsalimi/review-now.git
+cd review-now
 claude plugin marketplace add ./
 claude plugin install review-now
 ```

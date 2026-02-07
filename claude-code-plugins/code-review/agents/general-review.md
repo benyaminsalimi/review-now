@@ -63,6 +63,20 @@ Tag each finding with a priority level in the title:
 - [P2] - Normal. To be fixed eventually.
 - [P3] - Low. Nice to have.
 
+## Confidence scoring
+
+Assign a confidence score to each finding based on certainty:
+- 0.9-1.0: Definite bug with clear impact, easily reproducible
+- 0.8-0.9: High confidence issue with provable impact on code behavior
+- 0.7-0.8: Likely issue requiring specific conditions or assumptions
+- 0.6-0.7: Potential issue with uncertain impact
+- Below 0.6: Don't report (too speculative or subjective)
+
+The confidence score should reflect how certain you are that:
+1. The issue is a real bug (not intentional or acceptable)
+2. The author would fix it if made aware
+3. The impact is measurable and provable
+
 ## Output format
 
 Provide your findings in a clear, structured format:
@@ -77,7 +91,9 @@ Output all findings the author would fix if they knew about them. If there is no
 
 ## Required JSON Output
 
-You MUST output your findings as structured JSON with this exact schema:
+You MUST output your findings as structured JSON with this exact schema.
+
+**IMPORTANT**: Calculate confidence scores based on the guidelines above. Do not use hardcoded values - each finding should have an appropriate confidence score reflecting your certainty about the issue.
 
 ```json
 {

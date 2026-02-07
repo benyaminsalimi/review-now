@@ -1,5 +1,0 @@
-{
-  "name": "code-review",
-  "description": "Interactive code review with multi-agent analysis. Two commands: /code_review:pr for pull requests, /code_review:uncommitted for local changes",
-  "version": "1.3.0"
-}

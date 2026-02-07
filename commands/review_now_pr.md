@@ -1,11 +1,12 @@
 ---
-description: Interactive review of uncommitted changes with multi-agent analysis
+description: Interactive PR code review with multi-agent analysis
+argument-hint: <source-branch> <target-branch>
 allowed-tools: Bash(git:*), Read, Edit, Grep, Glob, Task, AskUserQuestion
 ---
 
-# /code_review:uncommitted
+# /review-now:pr
 
-Interactive code review for uncommitted changes. Reviews all staged, unstaged, and untracked changes with full walkthrough of each finding.
+Interactive code review for pull requests. Reviews changes between two branches with full walkthrough of each finding.
 
 Agent assumptions:
 - All tools are functional and will work without error. Do not test tools or make exploratory calls.
@@ -13,19 +14,55 @@ Agent assumptions:
 
 ---
 
-## Step 1: Pre-flight Check
+## Step 1: Parse Arguments
 
-Verify there are uncommitted changes to review:
+The user invoked `/review-now:pr $ARGUMENTS`.
 
-```bash
-git status --short
+**Required**: Exactly two space-separated arguments: `<source-branch> <target-branch>`
+
+Example: `/review-now:pr feature/user-auth main`
+
+If arguments are missing or invalid, print usage help and stop:
+
 ```
+### /review-now:pr
 
-If clean working tree (no output), print "No uncommitted changes to review." and stop.
+Compare and review changes between two branches interactively.
+
+**Usage:**
+  /review-now:pr <source-branch> <target-branch>
+
+**Example:**
+  /review-now:pr feature/user-auth main
+
+**Interactive walkthrough:**
+  - Apply proposed fix (commits automatically)
+  - Show solution before deciding
+  - Enter custom fix
+  - Ask deeper questions
+  - Skip to next finding
+```
 
 ---
 
-## Step 2: Load Review Guidelines
+## Step 2: Pre-flight Checks
+
+Fetch both branches and verify there are changes to review:
+
+```bash
+git fetch origin $SOURCE_BRANCH $TARGET_BRANCH
+```
+
+Check that both branches exist and have differences:
+```bash
+git diff origin/$TARGET_BRANCH...origin/$SOURCE_BRANCH
+```
+
+If no differences found, print "No changes between $SOURCE_BRANCH and $TARGET_BRANCH." and stop.
+
+---
+
+## Step 3: Load Review Guidelines
 
 Check if `REVIEW_GUIDELINES.md` exists in the repository root using Glob.
 
@@ -34,36 +71,34 @@ Check if `REVIEW_GUIDELINES.md` exists in the repository root using Glob.
 
 ---
 
-## Step 3: Discover AGENTS.md Files
+## Step 4: Discover AGENTS.md Files
 
 Use Glob to find all `**/AGENTS.md` files. Read them and store as `$AGENTS_MD_RULES` with their directory paths.
 
 ---
 
-## Step 4: Gather Changes
+## Step 5: Gather Changes
 
-**Get unstaged changes:**
+**Get the diff:**
 ```bash
-git diff
+git diff origin/$TARGET_BRANCH...origin/$SOURCE_BRANCH
 ```
 
-**Get staged changes:**
+**Get commit log:**
 ```bash
-git diff --cached
+git log --oneline origin/$TARGET_BRANCH..origin/$SOURCE_BRANCH
 ```
 
-**Get overview including untracked:**
+**Get changed file list:**
 ```bash
-git status --short
+git diff --name-only origin/$TARGET_BRANCH...origin/$SOURCE_BRANCH
 ```
 
-For untracked files, read their contents with Read tool.
-
-Store combined diff as `$DIFF`, file list as `$FILES`.
+Store as `$DIFF`, `$LOG`, `$FILES`.
 
 ---
 
-## Step 5: Execute Review
+## Step 6: Execute Review
 
 ### If `$REVIEW_MODE = "guidelines"` — Guideline-Based Review
 
@@ -80,6 +115,7 @@ Launch ALL THREE agents in parallel:
 Pass to each agent:
 - DIFF: `$DIFF`
 - FILES CHANGED: `$FILES`
+- COMMIT LOG: `$LOG`
 - AGENTS.MD RULES: `$AGENTS_MD_RULES`
 
 After all agents return:
@@ -89,7 +125,7 @@ After all agents return:
 
 ---
 
-## Step 6: Validate Findings
+## Step 7: Validate Findings
 
 For each finding, launch validation agent (Task with model "haiku"):
 
@@ -113,9 +149,9 @@ Launch all validation agents in parallel. Filter out REJECTED findings. Store as
 
 ---
 
-## Step 7: Interactive Walkthrough
+## Step 8: Interactive Walkthrough
 
-**IMPORTANT**: Always run interactive walkthrough, even if findings are empty.
+**IMPORTANT**: PR mode ALWAYS has interactive walkthrough, even if findings are empty.
 
 If no findings, print "✓ No issues found. Code looks good!" and stop.
 
@@ -149,7 +185,7 @@ Use `AskUserQuestion` with these options:
   "options": [
     {
       "label": "Apply fix",
-      "description": "Apply the recommended fix to your working directory"
+      "description": "Apply the recommended fix and commit automatically"
     },
     {
       "label": "Show solution",
@@ -180,8 +216,17 @@ Use `AskUserQuestion` with these options:
 **If "Apply fix":**
 1. Read the target file with Read tool
 2. Apply the fix using Edit tool
-3. Confirm: "✓ Fix applied to working directory. Moving to next finding."
-4. Move to next finding
+3. Stage the file: `git add [file]`
+4. Commit with descriptive message:
+   ```bash
+   git commit -m "Fix [priority]: [brief description]
+
+   [Full description and recommendation]
+
+   Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>"
+   ```
+5. Confirm: "✓ Fix applied and committed. Moving to next finding."
+6. Move to next finding
 
 **If "Show solution":**
 1. Read the target file
@@ -192,7 +237,15 @@ Use `AskUserQuestion` with these options:
 1. Ask user: "Please describe or paste your fix:"
 2. Use AskUserQuestion with free-text input
 3. Apply the user's fix using Edit tool
-4. Confirm: "✓ Custom fix applied. Moving to next finding."
+4. Stage and commit:
+   ```bash
+   git add [file]
+   git commit -m "Fix [priority]: [user's description]
+
+   Custom fix for: [description]
+
+   Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>"
+   ```
 5. Move to next finding
 
 **If "Ask question":**
@@ -212,21 +265,22 @@ Use `AskUserQuestion` with these options:
 
 ---
 
-## Step 8: Final Summary
+## Step 9: Final Summary
 
 After walkthrough completes:
 
 ```markdown
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Uncommitted Changes Review Complete
+PR Review Complete
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+**Branches:** [source] → [target]
 **Files changed:** [count]
 **Review strategy:** [Multi-agent / Guidelines]
 
 **Findings:**
 - Total: [N]
-- Fixed: [N]
+- Fixed & committed: [N]
 - Skipped: [N]
 
 **Priority breakdown:**
@@ -235,8 +289,10 @@ Uncommitted Changes Review Complete
 - P2: [N]
 - P3: [N]
 
+**Verdict:** [APPROVE / REQUEST CHANGES / NEEDS DISCUSSION]
+
 **Next steps:**
-- Review changes: git diff
-- Stage changes: git add .
-- Commit: git commit -m "message"
+- Review commits: git log
+- Push changes: git push
+- Create/update PR with findings
 ```

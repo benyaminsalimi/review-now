@@ -3,16 +3,16 @@
   "name": "local-dev",
   "description": "Local plugin development marketplace",
   "owner": {
-    "name": "Local Developer",
+    "name": "Benyamin Salimi",
     "email": "dev@localhost"
   },
   "plugins": [
     {
-      "name": "code-review",
-      "description": "Interactive code review with multi-agent analysis. Two commands: /code_review:pr for pull requests, /code_review:uncommitted for local changes",
-      "version": "1.3.0",
+      "name": "review-now",
+      "description": "Interactive code review with multi-agent analysis. Two commands: /review-now:pr for pull requests, /review-now:uncommitted for local changes",
+      "version": "2.0.0",
       "author": {
-        "name": "Local Developer",
+        "name": "Benyamin Salimi",
         "email": "dev@localhost"
       },
       "source": "./",

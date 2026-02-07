@@ -1,0 +1,5 @@
+{
+  "name": "review-now",
+  "description": "Interactive code review with multi-agent analysis. Two commands: /review-now:pr for pull requests, /review-now:uncommitted for local changes",
+  "version": "2.0.0"
+}

@@ -9,8 +9,8 @@
   "plugins": [
     {
       "name": "code-review",
-      "description": "Code review: branch diff or uncommitted changes — guideline-based or multi-agent (security + general + frontend)",
-      "version": "1.2.0",
+      "description": "Interactive code review with multi-agent analysis. Two commands: /code_review:pr for pull requests, /code_review:uncommitted for local changes",
+      "version": "1.3.0",
       "author": {
         "name": "Local Developer",
         "email": "dev@localhost"

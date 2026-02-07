@@ -1,46 +1,66 @@
-# code-review-skill
+# code-review
 
-A Claude Code plugin that provides `/code_review` — a multi-agent code review command with branch comparison and interactive uncommitted changes review.
+A Claude Code plugin providing interactive code review with multi-agent analysis. Two specialized commands for pull requests and uncommitted changes.
 
 ## Install
 
 ```bash
-claude plugin add /path/to/agent_skill
+cd /path/to/my-ai-tools/claude-code-plugins/code-review
+claude plugin marketplace add ./
+claude plugin install code-review@local-dev
 ```
 
-## Usage
+## Commands
 
-```
-/code_review <source-branch> <target-branch>
-/code_review uncommitted
-```
+### `/code_review:pr <source-branch> <target-branch>`
 
-### Branch Comparison
+Interactive PR review with automatic commits for each fix.
 
-```
-/code_review feature-branch main
+```bash
+/code_review:pr feature/user-auth main
 ```
 
-Fetches both branches from origin, diffs them, and produces a structured review report with a verdict.
+**Features:**
+- Fetches both branches and compares changes
+- Multi-agent analysis (security + general + frontend)
+- Interactive walkthrough with options for each finding
+- Automatic git commits when fixes are applied
 
-### Uncommitted Changes
-
-```
-/code_review uncommitted
-```
-
-Reviews all staged, unstaged, and untracked changes. After the review, walks through each finding one at a time with interactive options:
-
-- **Fix** — applies the recommended fix
-- **Show solution** — shows the code change before deciding
+**Interactive Options:**
+- **Apply fix** — applies recommended fix and commits automatically
+- **Show solution** — preview the proposed change before deciding
+- **Custom fix** — type or paste your own fix
+- **Ask question** — ask deeper questions about the finding
 - **Skip** — move to next finding
-- **Skip all** — stop walkthrough, list remaining findings
+- **Skip all** — stop walkthrough, show summary
+
+### `/code_review:uncommitted`
+
+Interactive review of all uncommitted changes (no arguments needed).
+
+```bash
+/code_review:uncommitted
+```
+
+**Features:**
+- Reviews staged + unstaged + untracked changes
+- Multi-agent analysis (security + general + frontend)
+- Interactive walkthrough with options for each finding
+- Fixes applied to working directory (no auto-commit)
+
+**Interactive Options:**
+- **Apply fix** — applies recommended fix to working directory
+- **Show solution** — preview the proposed change before deciding
+- **Custom fix** — type or paste your own fix
+- **Ask question** — ask deeper questions about the finding
+- **Skip** — move to next finding
+- **Skip all** — stop walkthrough, show summary
 
 ## How It Works
 
 ### Review Strategy Selection
 
-The plugin picks its strategy automatically based on one file:
+Both commands automatically pick their strategy based on one file:
 
 | `REVIEW_GUIDELINES.md` in repo root? | Strategy |
 |---------------------------------------|----------|
@@ -49,7 +69,7 @@ The plugin picks its strategy automatically based on one file:
 
 ### Multi-Agent Pipeline (no guidelines file)
 
-When no `REVIEW_GUIDELINES.md` is found, the plugin runs this pipeline:
+When no `REVIEW_GUIDELINES.md` is found, both commands run this pipeline:
 
 ```
 Pre-flight checks (branches exist? changes exist?)
@@ -70,7 +90,11 @@ Validate each finding (parallel haiku agents)
        |
 Filter false positives
        |
-Output report with verdict
+Interactive walkthrough
+  |- Apply fix / Show solution / Custom fix / Ask question / Skip
+  |- (PR mode: auto-commits after each fix)
+       |
+Final summary with verdict
 ```
 
 ### Guideline-Based Review (guidelines file found)
@@ -185,14 +209,17 @@ All agents produce the same JSON format for easy merging:
 ## File Structure
 
 ```
-agent_skill/
+code-review/
 ├── .claude-plugin/
-│   └── plugin.json           # Plugin manifest
+│   ├── plugin.json                      # Plugin manifest
+│   └── marketplace.json                 # Marketplace configuration
 ├── commands/
-│   └── code_review.md        # Orchestrator (mode routing, agent dispatch, report)
+│   ├── code_review_pr.md                # PR review orchestrator
+│   └── code_review_uncommitted.md       # Uncommitted changes orchestrator
 ├── agents/
-│   ├── security-review.md    # Security agent prompt
-│   └── general-review.md     # General review agent prompt
+│   ├── security-review.md               # Security agent prompt
+│   ├── general-review.md                # General review agent prompt
+│   └── frontend-review.md               # Frontend/Angular agent prompt
 └── README.md
 ```
 

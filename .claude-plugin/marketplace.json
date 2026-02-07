@@ -10,7 +10,7 @@
     {
       "name": "review-now",
       "description": "Interactive code review with multi-agent analysis. Walk through findings one at a time, apply fixes inline, ask questions about each issue. Supports both PR reviews and uncommitted changes with automatic commits in PR mode.",
-      "version": "2.0.0",
+      "version": "2.0.1",
       "author": {
         "name": "Benyamin Salimi",
         "email": "benyamin.salimi@gmail.com"

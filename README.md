@@ -187,11 +187,28 @@ review-now/
 
 ## Contributing
 
-Contributions welcome! Areas for improvement:
-- Additional language/framework agents
+Contributions welcome! We're open to:
+
+**Code Contributions:**
+- Additional language/framework agents (Python, Go, Rust, etc.)
 - Better false positive filtering
 - Custom validation rules
 - Web UI for review management
+- Performance improvements
+
+**Hooks:**
+- Pre-commit hooks for code review
+- Post-review automation hooks
+- Custom workflow integrations
+- Share your hooks in discussions!
+
+**Issues & Discussions:**
+- Bug reports
+- Feature requests
+- Agent improvement suggestions
+- Share your use cases and custom agents
+
+Open an issue or PR on [GitHub](https://github.com/benyaminsalimi/review-now)!
 
 ## License
 
